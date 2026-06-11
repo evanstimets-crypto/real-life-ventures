@@ -154,14 +154,15 @@ export default function Contact() {
                   ) : (
                     <form key="form" onSubmit={handleSubmit} className="flex flex-col gap-5">
                       {[
-                        { id: 'name', label: 'Name', type: 'text', placeholder: 'Your name' },
-                        { id: 'email', label: 'Email', type: 'email', placeholder: 'you@example.com' },
+                        { id: 'name', label: 'Name', type: 'text', placeholder: 'Your name', autoComplete: 'name' },
+                        { id: 'email', label: 'Email', type: 'email', placeholder: 'you@example.com', autoComplete: 'email' },
                       ].map((field) => (
                         <div key={field.id}>
                           <label htmlFor={field.id} className="block text-sm font-medium text-white/60 mb-1.5">{field.label}</label>
                           <input
                             id={field.id}
                             type={field.type}
+                            autoComplete={field.autoComplete}
                             value={form[field.id]}
                             onChange={e => handleChange(field.id, e.target.value)}
                             placeholder={field.placeholder}
