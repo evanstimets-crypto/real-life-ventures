@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import emailjs from '@emailjs/browser'
 import PageWrapper from '../components/PageWrapper'
 
 export default function Contact() {
@@ -22,9 +23,18 @@ export default function Contact() {
     if (Object.keys(errs).length) { setErrors(errs); return }
     setErrors({})
     setStatus('loading')
-    await new Promise(r => setTimeout(r, 1200))
-    setStatus('success')
-    setForm({ name: '', email: '', message: '' })
+    try {
+      await emailjs.send(
+        'service_740pmvq',
+        'template_xqa6x7i',
+        { from_name: form.name, from_email: form.email, message: form.message },
+        'aL47Cy0LxjL8E8dUB'
+      )
+      setStatus('success')
+      setForm({ name: '', email: '', message: '' })
+    } catch {
+      setStatus('error')
+    }
   }
 
   const handleChange = (field, val) => {
@@ -131,6 +141,15 @@ export default function Contact() {
                       <button onClick={() => setStatus('idle')} className="text-sm text-[#0066ff] border border-[#0066ff]/30 px-4 py-1.5 rounded-md hover:bg-[#0066ff]/10 transition-colors cursor-pointer">
                         Send Another
                       </button>
+                    </motion.div>
+                  ) : status === 'error' ? (
+                    <motion.div key="error" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-14 text-center">
+                      <div className="w-14 h-14 rounded-full bg-red-500/15 border border-red-500/30 flex items-center justify-center mb-4">
+                        <svg viewBox="0 0 24 24" fill="none" className="w-7 h-7 text-red-400"><path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                      </div>
+                      <h3 className="font-display text-xl font-bold text-white mb-2">Something went wrong</h3>
+                      <p className="text-white/45 text-sm mb-5">Please try again or email us directly at rlmediaclips@gmail.com</p>
+                      <button onClick={() => setStatus('idle')} className="text-sm text-[#0066ff] border border-[#0066ff]/30 px-4 py-1.5 rounded-md hover:bg-[#0066ff]/10 transition-colors cursor-pointer">Try Again</button>
                     </motion.div>
                   ) : (
                     <form key="form" onSubmit={handleSubmit} className="flex flex-col gap-5">
