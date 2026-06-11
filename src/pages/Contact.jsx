@@ -27,7 +27,7 @@ export default function Contact() {
       await emailjs.send(
         'service_740pmvq',
         'template_xqa6x7i',
-        { from_name: form.name, from_email: form.email, message: form.message },
+        { name: form.name, email: form.email, message: form.message, title: 'Website Inquiry', phone: 'N/A' },
         'aL47Cy0LxjL8E8dUB'
       )
       setStatus('success')
